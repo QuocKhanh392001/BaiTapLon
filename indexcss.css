@@ -7,6 +7,11 @@
 
 a{
     text-decoration: none;
+
+}
+
+a:active{
+    color: black;
 }
 
 .header{
@@ -87,6 +92,7 @@ a{
     height: 100%;
     display: flex;
     align-items: center;
+    
 }
 
 .feature-button{
@@ -98,6 +104,7 @@ a{
     align-items: center;
     margin: 0px 5px;
     cursor: pointer;
+    color: black;
 }
 
 .header-list{
@@ -186,11 +193,17 @@ a{
 
 .card-name{
     color: #2980b9;
-    margin: 10px 0px;
+    margin: 10px;
+    font-size: 15px;
+    height: 55px;
+    overflow: hidden;
 }
 
 .card-price{
     color: #e74c3c;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .mainupdate{
@@ -272,4 +285,114 @@ input:focus, textarea:focus, select:focus{
 .button-register:hover{
     background-color: black;
     color: white;
+}
+
+.footer{
+    width: 80%;
+    margin: auto;
+}
+
+.viewer{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px ;
+    background-color: #c0392b;
+    color: white;
+}
+
+.info-product{
+    display: flex;
+    margin: 20px 0px;
+    width: 100%;
+}
+
+.img-product{
+    width: 40%;
+    height: 500px;
+}
+
+.main-img{
+    height: 500px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.info-detail{
+    width: calc(60% - 20px);
+    margin-left: 20px;
+}
+
+.title-product{
+    font-size: 30px;
+    width: 100%;
+    overflow: hidden;
+    max-height: 15%;
+}
+
+ul{
+    list-style-position: inside;
+}
+
+ul li{
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.line-info{
+    display: flex;
+    margin: 5px 0px;
+}
+
+.general-name{
+    font-weight: 700;
+    font-size: 20px;
+    margin: 20px 0px;
+}
+
+.info-general-product{
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.price-product{
+    display: flex;
+    margin: 10px 0px;
+}
+
+.price-name{
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.price-value{
+    font-size: 30px;
+    color: #e74c3c;
+    margin-left: 10px;
+    font-weight: 700;
+}
+
+.button-sell{
+    height: 50px;
+    width: 200px;
+    display: flex;
+    background-color: #c0392b;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.description-title{
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.description-content{
+    margin: 10px 0px;
+    font-size: 20px;
 }

@@ -1,37 +1,6 @@
 <?php
 include('config.php');
 session_start();
-error_reporting(0);
-if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
-    $password = md5($_POST['password']);
-    if ($email != '' &&  $_POST['password'] != '') {
-        $sql = "SELECT * FROM taikhoannguoidung WHERE email = '$email' AND password ='$password'";
-        $result = mysqli_query($conn, $sql);
-        if ($result->num_rows > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $_SESSION['username'] = $row['username'];
-            header("Location: index.php");
-            $email = "";
-            $_POST['password'] = "";
-            $fp = "onlinemember.txt";
-            $fo = fopen($fp, 'r');
-            $fr = fread($fo, filesize($fp));
-            $fr++;
-            $fc = fclose($fo);
-            $fo = fopen($fp, 'w');
-            $fw = fwrite($fo, $fr);
-            $fc = fclose($fo);
-        }
-        else{
-            echo "<script>alert('Sai tài khoản hoặc mật khẩu')</script>";
-        }
-    }
-    else{
-        echo "<script>alert('Vui lòng điền đầy đủ thông tin')</script>";
-    }
-
-}
 $fp = "onlinemember.txt";
 $fo = fopen($fp, 'r');
 $fr = fread($fo, filesize($fp));
@@ -39,7 +8,6 @@ $fpv = "soluongtruycap.txt";
 $fov = fopen($fpv, 'r');
 $frv = fread($fov, filesize($fpv));
 $fcv = fclose($fov);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +31,8 @@ $fcv = fclose($fov);
                 <img src="img/logo.png" class="content-icon" alt="">
                 <div class="content-intro">
                     <div class="block-search">
-                        <input type="text" name="" placeholder="Nhập mã hoặc tên sản phẩm . . ." class="search-bar" id="">
+                        <input type="text" name="" placeholder="Nhập mã hoặc tên sản phẩm . . ." class="search-bar"
+                            id="">
                         <div class="search-icons">
                             <i class="material-icons">search</i>
                         </div>
@@ -115,29 +84,15 @@ $fcv = fclose($fov);
             </div>
         </div>
     </div>
-    <div class="main">
-        <div class="register">
-            <form action="" method="post">
-                <div class="title-register">ĐĂNG NHẬP</div>
-                <div class="form-register">
-                    <div class="icon-register"><i class="material-icons">email</i></div>
-                    <input type="text" class="input-register" value="<?php  echo $email?>" name = "email" placeholder="Email">
-                </div>
-                <div class="form-register">
-                    <div class="icon-register"><i class="material-icons">lock</i></div>
-                    <input type="password" class="input-register" value="<?php echo $_POST['password'] ?>" name="password" placeholder="Mật khẩu">
-                </div>
-                <div class="button-form">
-                    <button class="button-register"   type="submit" name="submit">Đăng nhập</button>
-                    <div class="button-register"  onclick="window.location='index.php'">Trở về</div>
-                </div>
-            </form>
-        </div>
+    <div class="mainupdate">
+        TRANG BẠN ĐANG TRUY CẬP HIỆN ĐANG CẬP NHẬT . . .
     </div>
     <div class="footer">
         <div class="viewer">
             <div class="visitor">Số lượng người đã truy cập: <?php echo $frv ?></div>
             <div class="online">Thành viên đang hoạt động: <?php echo $fr ?></div>
         </div>
-    </div>
+    </div>                       
 </body>
+
+</html>

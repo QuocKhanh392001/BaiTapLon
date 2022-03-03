@@ -37,6 +37,13 @@ if (isset($_POST['submit'])) {
         echo "<script>alert('Vui lòng điền đầy đủ thông tin')</script>";
     }
 }
+$fp = "onlinemember.txt";
+$fo = fopen($fp, 'r');
+$fr = fread($fo, filesize($fp));
+$fpv = "soluongtruycap.txt";
+$fov = fopen($fpv, 'r');
+$frv = fread($fov, filesize($fpv));
+$fcv = fclose($fov);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,18 +73,30 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="block-feature">
-                        <div class="feature-button" onclick="window.location='register.php'">
-                            <i class="material-icons">description</i> ĐĂNG KÝ
-                        </div>
-                        <div class="feature-button" onclick="window.location='login.php'">
-                            <i class="material-icons">login</i> ĐĂNG NHẬP
-                        </div>
-                        <div class="feature-button" onclick="window.location='update.html'">
+                    <?php 
+                            if (isset($_SESSION['username'])) {
+                                echo '<a class="feature-button" href="">
+                                <i class="material-icons">account_circle</i> '.$_SESSION['username'].'
+                            </a>
+                            <a class="feature-button" href="logout.php">
+                                <i class="material-icons">logout</i> ĐĂNG XUẤT
+                            </a>';
+                            }
+                            else{
+                                echo '<a class="feature-button" href="register.php">
+                                <i class="material-icons">description</i> ĐĂNG KÝ
+                            </a>
+                            <a class="feature-button" href="login.php">
+                                <i class="material-icons">login</i> ĐĂNG NHẬP
+                            </a>';
+                            }
+                        ?>
+                        <a class="feature-button" href="update.php">
                             <i class="material-icons">sell</i> KHUYẾN MÃI
-                        </div>
-                        <div class="feature-button" onclick="window.location='update.html'">
+                        </a>
+                        <a class="feature-button" href="update.php">
                             <i class="material-icons">shopping_cart</i> GIỎ HÀNG
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -89,13 +108,13 @@ if (isset($_POST['submit'])) {
             <div class="list-button" onclick="window.location='index.php'">
                 <i class="material-icons">home</i> TRANG CHỦ
             </div>
-            <div class="list-button" onclick="window.location='update.html'">
+            <div class="list-button" onclick="window.location='update.php'">
                 <i class="material-icons">info</i> GIỚI THIỆU
             </div>
-            <div class="list-button" onclick="window.location='update.html'">
+            <div class="list-button" onclick="window.location='update.php'">
                 <i class="material-icons">newspaper</i> TIN TỨC
             </div>
-            <div class="list-button" onclick="window.location='update.html'">
+            <div class="list-button" onclick="window.location='update.php'">
                 <i class="material-icons">call</i> LIÊN HỆ
             </div>
         </div>
@@ -125,6 +144,12 @@ if (isset($_POST['submit'])) {
                     <div class="button-register"  onclick="window.location='index.php'">Trở về</div>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="viewer">
+            <div class="visitor">Số lượng người đã truy cập: <?php echo $frv ?></div>
+            <div class="online">Thành viên đang hoạt động: <?php echo $fr ?></div>
         </div>
     </div>
 </body>

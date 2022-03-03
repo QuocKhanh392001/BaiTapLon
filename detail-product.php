@@ -1,37 +1,6 @@
 <?php
 include('config.php');
 session_start();
-error_reporting(0);
-if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
-    $password = md5($_POST['password']);
-    if ($email != '' &&  $_POST['password'] != '') {
-        $sql = "SELECT * FROM taikhoannguoidung WHERE email = '$email' AND password ='$password'";
-        $result = mysqli_query($conn, $sql);
-        if ($result->num_rows > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $_SESSION['username'] = $row['username'];
-            header("Location: index.php");
-            $email = "";
-            $_POST['password'] = "";
-            $fp = "onlinemember.txt";
-            $fo = fopen($fp, 'r');
-            $fr = fread($fo, filesize($fp));
-            $fr++;
-            $fc = fclose($fo);
-            $fo = fopen($fp, 'w');
-            $fw = fwrite($fo, $fr);
-            $fc = fclose($fo);
-        }
-        else{
-            echo "<script>alert('Sai tài khoản hoặc mật khẩu')</script>";
-        }
-    }
-    else{
-        echo "<script>alert('Vui lòng điền đầy đủ thông tin')</script>";
-    }
-
-}
 $fp = "onlinemember.txt";
 $fo = fopen($fp, 'r');
 $fr = fread($fo, filesize($fp));
@@ -39,7 +8,10 @@ $fpv = "soluongtruycap.txt";
 $fov = fopen($fpv, 'r');
 $frv = fread($fov, filesize($fpv));
 $fcv = fclose($fov);
-
+$id_product = $_GET['id'];
+$sql = "SELECT * FROM sanpham s JOIN hangsanxuat h ON s.hangsanxuat = h.id_hangsanxuat JOIN tinhtrangsanpham t ON t.id_tinhtrang = s.tinhtrang JOIN mausanpham m ON m.id_mau = s.mau JOIN led l ON l.id_led = s.led WHERE id = $id_product";
+$result = mysqli_query($conn, $sql);
+$data = mysqli_fetch_array($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -116,22 +88,52 @@ $fcv = fclose($fov);
         </div>
     </div>
     <div class="main">
-        <div class="register">
-            <form action="" method="post">
-                <div class="title-register">ĐĂNG NHẬP</div>
-                <div class="form-register">
-                    <div class="icon-register"><i class="material-icons">email</i></div>
-                    <input type="text" class="input-register" value="<?php  echo $email?>" name = "email" placeholder="Email">
+        <div class="info-product">
+            <div class="img-product">
+                <img src="<?php echo $data['hinhanh'] ?>" class="main-img" alt="">
+
+            </div>
+            <div class="info-detail">
+                <div class="title-product"><?php echo $data['tensanpham'] ?></div>
+
+                <div class="general-name">Thông tin chung:</div>
+                <ul>
+                    <div class="line-info">
+                        <li>Hãng sản xuất:</li>
+                        <div class="info-general-product"><?php echo $data['tenhangsanxuat'] ?></div>
+                    </div>
+                    <div class="line-info">
+                        <li>Tình trạng:</li>
+                        <div class="info-general-product"><?php echo $data['tinhtrangsanpham'] ?></div>
+                    </div>
+                    <div class="line-info">
+                        <li>Bảo hành:</li>
+                        <div class="info-general-product"><?php echo $data['baohanh'] ?> tháng</div>
+                    </div>
+                    <div class="line-info">
+                        <li>Màu:</li>
+                        <div class="info-general-product"><?php echo $data['mausanpham'] ?></div>
+                    </div>
+                    <div class="line-info">
+                        <li>LED:</li>
+                        <div class="info-general-product"><?php echo $data['loai_led'] ?></div>
+                    </div>
+                </ul>
+                <div class="price-product">
+                    <div class="price-name">Giá tiền:</div>
+                    <div class="price-value"><?php echo $data['giatien'] ?></div>
                 </div>
-                <div class="form-register">
-                    <div class="icon-register"><i class="material-icons">lock</i></div>
-                    <input type="password" class="input-register" value="<?php echo $_POST['password'] ?>" name="password" placeholder="Mật khẩu">
-                </div>
-                <div class="button-form">
-                    <button class="button-register"   type="submit" name="submit">Đăng nhập</button>
-                    <div class="button-register"  onclick="window.location='index.php'">Trở về</div>
-                </div>
-            </form>
+
+                <a href="#" class="button-sell">Đặt hàng</a>
+
+            </div>
+        </div>
+        <div class="description-title">
+            Mô tả sản phẩm
+        </div>
+        <hr size="10px" color="black" width="25%" align="left">
+        <div class="description-content">
+            <?php echo $data['motasanpham'] ?>
         </div>
     </div>
     <div class="footer">
@@ -141,3 +143,5 @@ $fcv = fclose($fov);
         </div>
     </div>
 </body>
+
+</html>
