@@ -40,6 +40,7 @@ if (isset($_POST['submit'])) {
 $fp = "onlinemember.txt";
 $fo = fopen($fp, 'r');
 $fr = fread($fo, filesize($fp));
+$fc = fclose($fo);
 $fpv = "soluongtruycap.txt";
 $fov = fopen($fpv, 'r');
 $frv = fread($fov, filesize($fpv));
@@ -94,7 +95,7 @@ $fcv = fclose($fov);
                         <a class="feature-button" href="update.php">
                             <i class="material-icons">sell</i> KHUYẾN MÃI
                         </a>
-                        <a class="feature-button" href="update.php">
+                        <a class="feature-button" href="cart.php">
                             <i class="material-icons">shopping_cart</i> GIỎ HÀNG
                         </a>
                     </div>

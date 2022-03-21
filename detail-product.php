@@ -4,14 +4,20 @@ session_start();
 $fp = "onlinemember.txt";
 $fo = fopen($fp, 'r');
 $fr = fread($fo, filesize($fp));
+$fc = fclose($fo);
 $fpv = "soluongtruycap.txt";
 $fov = fopen($fpv, 'r');
 $frv = fread($fov, filesize($fpv));
 $fcv = fclose($fov);
 $id_product = $_GET['id'];
-$sql = "SELECT * FROM sanpham s JOIN hangsanxuat h ON s.hangsanxuat = h.id_hangsanxuat JOIN tinhtrangsanpham t ON t.id_tinhtrang = s.tinhtrang JOIN mausanpham m ON m.id_mau = s.mau JOIN led l ON l.id_led = s.led WHERE id = $id_product";
+$sql = "SELECT * FROM sanpham s 
+JOIN hangsanxuat h ON s.hangsanxuat = h.id_hangsanxuat 
+JOIN tinhtrangsanpham t ON t.id_tinhtrang = s.tinhtrang 
+JOIN mausanpham m ON m.id_mau = s.mau 
+JOIN led l ON l.id_led = s.led WHERE id = $id_product";
 $result = mysqli_query($conn, $sql);
 $data = mysqli_fetch_array($result);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +68,7 @@ $data = mysqli_fetch_array($result);
                         <a class="feature-button" href="update.php">
                             <i class="material-icons">sell</i> KHUYẾN MÃI
                         </a>
-                        <a class="feature-button" href="update.php">
+                        <a class="feature-button" href="cart.php">
                             <i class="material-icons">shopping_cart</i> GIỎ HÀNG
                         </a>
                     </div>
@@ -121,10 +127,14 @@ $data = mysqli_fetch_array($result);
                 </ul>
                 <div class="price-product">
                     <div class="price-name">Giá tiền:</div>
-                    <div class="price-value"><?php echo $data['giatien'] ?></div>
+                    <div class="price-value"><?php echo number_format($data['giatien'])?>₫</div>
                 </div>
-
-                <a href="#" class="button-sell">Đặt hàng</a>
+                <form action="cart.php?action=add&id=<?=$data['id']?>" method="POST">
+                    <input type="hidden" value="<?=$data['tensanpham'] ?>"  name="tensanpham">
+                    <input type="hidden" value="<?=$data['hinhanh'] ?>"  name="hinhanh">
+                    <input type="hidden" value="<?=$data['giatien'] ?>"  name="giatien">
+                    <input type="submit" name="add-to-cart" class="button-sell" value="Đặt hàng">
+                </form>
 
             </div>
         </div>

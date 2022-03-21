@@ -1,18 +1,29 @@
 <?php
 include('config.php');
 session_start();
-$fpv = "soluongtruycap.txt";
-$fov = fopen($fpv, 'r');
-$frv = fread($fov, filesize($fpv));
-$frv++;
-$fcv = fclose($fov);
-$fov = fopen($fpv, 'w');
-$fwv = fwrite($fov, $frv);
-$fcv = fclose($fov);
-$fp = "onlinemember.txt";
-$fo = fopen($fp, 'r');
-$fr = fread($fo, filesize($fp));
-$fc = fclose($fo);
+if (isset($_SESSION['username'])) {
+    $fp = "onlinemember.txt";
+    $fo = fopen($fp, 'r');
+    $fr = fread($fo, filesize($fp));
+    $fc = fclose($fo);
+    $fpv = "soluongtruycap.txt";
+    $fov = fopen($fpv, 'r');
+    $frv = fread($fov, filesize($fpv));
+    $fcv = fclose($fov);
+}else{
+    $fpv = "soluongtruycap.txt";
+    $fov = fopen($fpv, 'r');
+    $frv = fread($fov, filesize($fpv));
+    $frv++;
+    $fcv = fclose($fov);
+    $fov = fopen($fpv, 'w');
+    $fwv = fwrite($fov, $frv);
+    $fcv = fclose($fov);
+    $fp = "onlinemember.txt";
+    $fo = fopen($fp, 'r');
+    $fr = fread($fo, filesize($fp));
+    $fc = fclose($fo);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +74,7 @@ $fc = fclose($fo);
                         <a class="feature-button" href="update.php">
                             <i class="material-icons">sell</i> KHUYẾN MÃI
                         </a>
-                        <a class="feature-button" href="update.php">
+                        <a class="feature-button" href="cart.php">
                             <i class="material-icons">shopping_cart</i> GIỎ HÀNG
                         </a>
                     </div>
@@ -101,7 +112,7 @@ $fc = fclose($fo);
                     echo '<a class="product-card" href="detail-product.php?id='.$data['id'].'" >
                         <img src="' . $data['hinhanh'] . '" alt="" class="card-img">
                         <div class="card-name">' . $data['tensanpham'] . '</div>
-                        <div class="card-price">' . $data['giatien'] . '</div>
+                        <div class="card-price">' .number_format($data['giatien']) . '₫</div>
                     </a>';
                 }
                 ?>
@@ -121,7 +132,7 @@ $fc = fclose($fo);
                     echo '<a class="product-card" href="detail-product.php?id='.$data['id'].'" >
                         <img src="' . $data['hinhanh'] . '" alt="" class="card-img">
                         <div class="card-name">' . $data['tensanpham'] . '</div>
-                        <div class="card-price">' . $data['giatien'] . '</div>
+                        <div class="card-price">' .number_format($data['giatien']) . '₫</div>
                     </a>';
                 }
                 ?>
@@ -139,7 +150,7 @@ $fc = fclose($fo);
                     echo '<a class="product-card" href="detail-product.php?id='.$data['id'].'" >
                         <img src="' . $data['hinhanh'] . '" alt="" class="card-img">
                         <div class="card-name">' . $data['tensanpham'] . '</div>
-                        <div class="card-price">' . $data['giatien'] . '</div>
+                        <div class="card-price">' .number_format($data['giatien']) . '₫</div>
                     </a>';
                 }
                 ?>
@@ -157,7 +168,7 @@ $fc = fclose($fo);
                     echo '<a class="product-card" href="detail-product.php?id='.$data['id'].'" >
                         <img src="' . $data['hinhanh'] . '" alt="" class="card-img">
                         <div class="card-name">' . $data['tensanpham'] . '</div>
-                        <div class="card-price">' . $data['giatien'] . '</div>
+                        <div class="card-price">' .number_format($data['giatien']) . '₫</div>
                     </a>';
                 }
                 ?>

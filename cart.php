@@ -1,5 +1,7 @@
 <?php
 include('config.php');
+
+error_reporting(0);
 session_start();
 $fpv = "soluongtruycap.txt";
 $fov = fopen($fpv, 'r');
@@ -9,6 +11,58 @@ $fp = "onlinemember.txt";
 $fo = fopen($fp, 'r');
 $fr = fread($fo, filesize($fp));
 $fc = fclose($fo);
+if (isset($_POST['add-to-cart'])) {
+    if (isset($_SESSION['shopping_cart'])) {
+        $item_array_id = array_column($_SESSION['shopping_cart'], 'item_id');
+        if (!in_array($_GET['id'], $item_array_id)) {
+          $count = count($_SESSION['shopping_cart']);
+          $item_array = array(
+            'item_id'   =>  $_GET['id'],
+            'item_name' =>  $_POST['tensanpham'],
+            'item_img'  =>  $_POST['hinhanh'],
+            'item_price'=>  $_POST['giatien']
+        );
+        $_SESSION['shopping_cart'][$count] = $item_array;
+    }
+        else{
+            echo '<script>alert("Sản phẩm đã có trong giỏ hàng")</script>';
+            echo'<script>window.location="index.php"</script>';
+        };
+    }
+    else{
+        $item_array = array(
+            'item_id'   =>  $_GET['id'],
+            'item_name' =>  $_POST['tensanpham'],
+            'item_img'  =>  $_POST['hinhanh'],
+            'item_price'=>  $_POST['giatien']
+        );
+        $_SESSION['shopping_cart'][0] = $item_array;
+        
+    };
+    
+}
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'delete') {
+        foreach ($_SESSION['shopping_cart'] as $key => $value) {
+            if ($value['item_id'] == $_GET['id']) {
+                unset($_SESSION['shopping_cart'][$key]);
+            }
+        }
+    }
+}
+if (isset($_POST['payment_click'])) {
+    if ($_POST['username'] != '' && $_POST['email_user'] != '' && $_POST['phonenumber'] != '' && $_POST['address_user'] != '') {
+        echo '<script>alert("Thanh toán thành công")</script>';
+        echo '<script>alert("Sản phẩm sẽ giao hàng tận nhà và thanh toán trực tiếp")</script>';
+        echo'<script>window.location="index.php"</script>';    
+        foreach ($_SESSION['shopping_cart'] as $key => $value) {
+                unset($_SESSION['shopping_cart'][$key]);
+        }
+    }
+    else{
+        echo '<script>alert("Vui lòng điền đầy đủ thông tin")</script>';    
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,7 +113,7 @@ $fc = fclose($fo);
                         <a class="feature-button" href="update.php">
                             <i class="material-icons">sell</i> KHUYẾN MÃI
                         </a>
-                        <a class="feature-button" href="update.php">
+                        <a class="feature-button" href="cart.php">
                             <i class="material-icons">shopping_cart</i> GIỎ HÀNG
                         </a>
                     </div>
@@ -83,6 +137,91 @@ $fc = fclose($fo);
                 <i class="material-icons">call</i> LIÊN HỆ
             </div>
         </div>
+    </div>
+    <div class="main">
+        <form action="cart.php?action=submit" method="post">
+            <table  class="table-cart">
+                <tr >
+                    <th class="col-one">Sản phẩm</th>
+                    <th class="col-two">Tên sản phẩm</th>
+                    <th class="col-three">Số lượng</th>
+                    <th class="col-four">Thành tiền</th>
+                    <th class="col-five">Xóa</th>
+                </tr>
+                <?php 
+                if (!empty($_SESSION['shopping_cart'])) {
+                    $total = 0;
+                    if (isset($_POST['update_click'])) {
+                        $price = 0;
+                        foreach ($_SESSION['shopping_cart'] as $key => $value) {
+                            $_SESSION['quantity'][$value['item_id']] = $_POST['quantity('.$value['item_id'].')'];
+                            ?>
+                            <tr class="rows-cart">
+                                <td><img src="<?php echo $value['item_img'] ?>" class="img-cart" alt=""></td>
+                                <td><a href="detail-product.php?id=<?php echo $value['item_id'] ?>" class="name-product-cart"><?php echo $value['item_name'] ?></a></td>
+                                <td><input type="number" name="quantity(<?php echo $value['item_id']?>)" class="input-quantity" min="1" value="<?php echo $_SESSION['quantity'][$value['item_id']] ?>"></td>
+                                <td class="price-product-cart"><?php echo number_format($price =  $_SESSION['quantity'][$value['item_id']] * $value['item_price']) ?>₫</td>
+                                <td class="icon-delete"><a href="cart.php?action=delete&id=<?php echo $value['item_id'] ?>"><i class="material-icons">delete</i></a></td>
+                            </tr>
+                       
+                            <?php
+                                $total = $total + ($value['item_price'] * $_SESSION['quantity'][$value['item_id']]);
+                            ?>
+                            <?php
+                        }
+                    }
+                    else{
+                        foreach ($_SESSION['shopping_cart'] as $key => $value) {
+                            ?>
+                            <tr class="rows-cart">
+                                <td><img src="<?php echo $value['item_img'] ?>" class="img-cart" alt=""></td>
+                                <td><a href="detail-product.php?id=<?php echo $value['item_id'] ?>" class="name-product-cart"><?php echo $value['item_name'] ?></a></td>
+                                <td><input type="number" name="quantity(<?php echo $value['item_id']?>)" class="input-quantity" min="1" value="1"></td>
+                                <td class="price-product-cart"><?php echo number_format($value['item_price']) ?>₫</td>
+                                <td class="icon-delete"><a href="cart.php?action=delete&id=<?php echo $value['item_id'] ?>"><i class="material-icons">delete</i></a></td>
+                            </tr>
+                       
+                            <?php
+                            
+                            $total = $total + $value['item_price'];
+                            ?>
+                            <?php
+                        }
+                    }
+                    
+                }
+                else{
+                    echo '<script>alert("Không có sản phẩm trong giỏ hàng")</script>';
+                    echo'<script>window.location="index.php"</script>';
+                }
+                ?>
+                <tr>
+                    <td class="sum-price" colspan="3">Tổng tiền:</td>
+                    <td class="sum-price" colspan="2"><?php echo number_format($total) ?>₫</td>
+                </tr>
+            </table>
+            <div class="div-button-update">
+            <input type="submit" name="update_click" class="button-update" value="Cập nhật">
+            </div>
+            <hr>
+            <div class="form-user">
+                <div class="title-form">Thông tin thanh toán</div>
+                <div class="user-name"><input type="text" placeholder="Họ và tên" name="username"></div>
+                <div class="email-phone">
+                    <div class="email-user">
+                        <input type="text" placeholder="Email" name="email_user">
+                    </div>
+                    <div class="phone-user">
+                        <input type="text" placeholder="Số điện thoại" name="phonenumber">
+                    </div>
+                </div>
+                <div class="address-user"><input type="text" placeholder="Địa chỉ" name="address_user"></div>
+                <textarea name="note_user" class="note-user" placeholder="Ghi chú" id="" cols="30" rows="10"></textarea>
+            </div>
+            <div class="div-button-payment">
+            <input type="submit" name="payment_click" value="Thanh toán">
+            </div>
+        </form>
     </div>
     <div class="footer">
         <div class="viewer">
